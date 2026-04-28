@@ -1,6 +1,6 @@
 # Wazuh SOC Lab – Attack Detection & File Integrity Monitoring
 
-SOC lab using Wazuh SIEM to detect SSH brute-force attacks and file integrity changes.
+A hands-on SOC lab built using Wazuh SIEM to simulate real-world attacks and analyze detection mechanisms.
 
 ---
 
@@ -70,6 +70,16 @@ The lab was built using virtual machines:
   * Used for attack simulation and as a monitored endpoint
 
 Both machines were connected using a bridged network to allow direct communication.
+
+---
+
+## 🛠️ Tools & Technologies
+
+* Wazuh SIEM (Manager, Agent, Dashboard)
+* Kali Linux (Attack simulation)
+* Hydra (Brute-force attack tool)
+* VirtualBox (Lab environment)
+* Linux (File system monitoring & log generation)
 
 ---
 
@@ -176,6 +186,17 @@ This allows detection of unauthorized modifications and helps identify potential
 
 ---
 
+## ⚠️ Challenges Faced
+
+* Agent connection issues due to changing IP addresses
+* Network configuration problems (NAT vs Bridged mode)
+* File Integrity Monitoring not triggering due to scan frequency
+* Permission issues while modifying protected system files
+
+These challenges helped improve troubleshooting and debugging skills in a real SOC environment.
+
+---
+
 ## 📊 Conclusion
 
 This project demonstrates how a SIEM solution like Wazuh can be used to detect real-world attack scenarios in a controlled lab environment.
@@ -192,11 +213,12 @@ The project highlights the importance of:
 
 ## 🧠 Skills Gained
 
-* Understanding of SIEM concepts and SOC workflows
-* Hands-on experience with Wazuh (agent, manager, dashboard)
+* SSH brute-force attack detection using Hydra
+* File Integrity Monitoring (FIM) on critical system files
+* Real-time alert analysis in Wazuh Dashboard
 * Log analysis and threat detection
-* File Integrity Monitoring (FIM) and hash-based detection
-* Basic incident analysis and investigation
+* Basic incident analysis and investigation and hash-based detection
+* Hands-on SOC workflow: Attack → Detection → Analysis
 
 ---
 
