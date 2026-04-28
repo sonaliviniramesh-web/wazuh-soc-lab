@@ -70,3 +70,45 @@ The lab was built using virtual machines:
   * Used for attack simulation and as a monitored endpoint
 
 Both machines were connected using a bridged network to allow direct communication.
+
+---
+
+## ⚔️ Attack Simulation
+
+To test the detection capabilities of Wazuh, multiple attack scenarios were simulated on the monitored system.
+
+### 🔐 1. SSH Brute-Force Attack
+
+A brute-force attack was performed using Hydra against the SSH service running on the target machine.
+
+```bash
+hydra -l root -P rockyou.txt ssh://<192.168.1.8>
+```
+
+This attack generates multiple failed login attempts, which are captured by the Wazuh agent and forwarded to the manager for analysis.
+
+![SSH Brute Force](images/04_ssh_bruteforce_attack.png)
+
+---
+
+### 📁 2. File Integrity Monitoring (FIM) Test
+
+To simulate unauthorized changes, critical system files and test files were modified.
+
+```bash
+sudo sh -c 'echo "malicious_entry" >> /etc/passwd'
+```
+
+A test file was also created and modified:
+
+```bash
+sudo touch /etc/fim_test_file
+sudo sh -c 'echo "test123" >> /etc/fim_test_file'
+```
+
+These changes were monitored by Wazuh’s File Integrity Monitoring (syscheck) module.
+
+![FIM Attack Simulation](images/05_fim_attack_simulation.png)
+
+---
+
