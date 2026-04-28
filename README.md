@@ -112,3 +112,66 @@ These changes were monitored by Wazuh’s File Integrity Monitoring (syscheck) m
 
 ---
 
+## 🚨 Detection & Analysis
+
+After simulating the attacks, Wazuh successfully detected and logged the malicious activities.
+
+---
+
+### 🔐 1. SSH Brute-Force Detection
+
+The brute-force attack generated multiple failed login attempts, which were captured by the Wazuh agent.
+
+These events appeared in the Wazuh dashboard as repeated authentication failures, indicating a potential brute-force attack.
+
+Key indicators observed:
+
+* Multiple failed SSH login attempts
+* Repeated access attempts from the same IP
+* Authentication failure logs (`sshd`, `pam`)
+
+```md
+![SSH Attack Detection](images/06_ssh_attack_detected.png)
+```
+
+---
+
+### 📁 2. File Integrity Monitoring (FIM) Detection
+
+Wazuh’s syscheck module detected changes made to monitored files.
+
+The following events were observed:
+
+* Creation of a new file (`/etc/fim_test_file`)
+* Modification of the test file
+* Modification of a critical system file (`/etc/passwd`)
+
+Wazuh recorded detailed information about these changes, including:
+
+* File path
+* Timestamp (mtime)
+* File size changes
+* Cryptographic hashes (MD5, SHA1, SHA256)
+
+```md
+![FIM Detection](images/07_fim_detection.png)
+```
+
+---
+
+### 🔍 Event Analysis
+
+Detailed inspection of the alerts shows how Wazuh tracks file integrity.
+
+For each modified file, the system records:
+
+* Previous vs updated hash values
+* Metadata changes (size, permissions, timestamps)
+
+This allows detection of unauthorized modifications and helps identify potential system compromise.
+
+```md
+![Event Analysis](images/08_event_analysis_hash_changes.png)
+```
+
+---
