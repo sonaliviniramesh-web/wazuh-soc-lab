@@ -175,3 +175,35 @@ This allows detection of unauthorized modifications and helps identify potential
 ```
 
 ---
+
+## 📊 Conclusion
+
+This project demonstrates how a SIEM solution like Wazuh can be used to detect real-world attack scenarios in a controlled lab environment.
+
+Through this lab, I was able to simulate attacks, monitor system activity, and analyze how security events are detected and logged.
+
+The project highlights the importance of:
+
+* Continuous monitoring of system logs
+* Detecting brute-force attacks through authentication failures
+* Identifying unauthorized file changes using File Integrity Monitoring (FIM)
+
+---
+
+## 🧠 Skills Gained
+
+* Understanding of SIEM concepts and SOC workflows
+* Hands-on experience with Wazuh (agent, manager, dashboard)
+* Log analysis and threat detection
+* File Integrity Monitoring (FIM) and hash-based detection
+* Basic incident analysis and investigation
+
+---
+
+## 🚀 Future Improvements
+
+* Integrating additional log sources (e.g., web server logs)
+* Automating alert responses
+* Expanding detection rules for more attack scenarios
+
+---
