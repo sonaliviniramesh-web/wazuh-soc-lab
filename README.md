@@ -1,6 +1,6 @@
 # Wazuh SOC Lab – Attack Detection & File Integrity Monitoring
 
-A hands-on SOC lab built using Wazuh SIEM to simulate real-world attacks and analyze detection mechanisms.
+🚨 A hands-on SOC lab built using Wazuh SIEM to simulate real-world attacks and analyze detection mechanisms.
 
 ---
 
@@ -85,17 +85,15 @@ Both machines were connected using a bridged network to allow direct communicati
 
 ## ⚔️ Attack Simulation
 
-To test the detection capabilities of Wazuh, multiple attack scenarios were simulated on the monitored system.
-
 ### 🔐 1. SSH Brute-Force Attack
 
-A brute-force attack was performed using Hydra against the SSH service running on the target machine.
+A brute-force attack was performed using Hydra against the SSH service:
 
 ```bash
-hydra -l root -P rockyou.txt ssh://<192.168.1.8>
+hydra -l root -P rockyou.txt ssh://192.168.1.8
 ```
 
-This attack generates multiple failed login attempts, which are captured by the Wazuh agent and forwarded to the manager for analysis.
+This generated multiple failed login attempts captured by the Wazuh agent.
 
 ![SSH Brute Force](images/04_ssh_bruteforce_attack.png)
 
@@ -103,20 +101,18 @@ This attack generates multiple failed login attempts, which are captured by the 
 
 ### 📁 2. File Integrity Monitoring (FIM) Test
 
-To simulate unauthorized changes, critical system files and test files were modified.
+To simulate unauthorized changes:
 
 ```bash
 sudo sh -c 'echo "malicious_entry" >> /etc/passwd'
 ```
 
-A test file was also created and modified:
+Test file creation and modification:
 
 ```bash
 sudo touch /etc/fim_test_file
 sudo sh -c 'echo "test123" >> /etc/fim_test_file'
 ```
-
-These changes were monitored by Wazuh’s File Integrity Monitoring (syscheck) module.
 
 ![FIM Attack Simulation](images/05_fim_attack_simulation.png)
 
@@ -124,108 +120,114 @@ These changes were monitored by Wazuh’s File Integrity Monitoring (syscheck) m
 
 ## 🚨 Detection & Analysis
 
-After simulating the attacks, Wazuh successfully detected and logged the malicious activities.
+### 🔐 SSH Brute-Force Detection
 
----
+Wazuh detected repeated authentication failures indicating a brute-force attempt.
 
-### 🔐 1. SSH Brute-Force Detection
-
-The brute-force attack generated multiple failed login attempts, which were captured by the Wazuh agent.
-
-These events appeared in the Wazuh dashboard as repeated authentication failures, indicating a potential brute-force attack.
-
-Key indicators observed:
+Key indicators:
 
 * Multiple failed SSH login attempts
-* Repeated access attempts from the same IP
-* Authentication failure logs (`sshd`, `pam`)
+* Repeated access attempts from same IP
+* `sshd` and `pam` logs
 
-```md
-![SSH Attack Detection](images/06_ssh_attack_detected.png)
-```
+![SSH Detection](images/06_ssh_attack_detected.png)
 
 ---
 
-### 📁 2. File Integrity Monitoring (FIM) Detection
+### 📁 File Integrity Monitoring Detection
 
-Wazuh’s syscheck module detected changes made to monitored files.
+Wazuh detected:
 
-The following events were observed:
+* File creation (`/etc/fim_test_file`)
+* File modification (`/etc/fim_test_file`)
+* Critical file modification (`/etc/passwd`)
 
-* Creation of a new file (`/etc/fim_test_file`)
-* Modification of the test file
-* Modification of a critical system file (`/etc/passwd`)
-
-Wazuh recorded detailed information about these changes, including:
+Detection includes:
 
 * File path
-* Timestamp (mtime)
-* File size changes
-* Cryptographic hashes (MD5, SHA1, SHA256)
+* Timestamp
+* Size changes
+* Hash changes (MD5, SHA1, SHA256)
 
-```md
 ![FIM Detection](images/07_fim_detection.png)
-```
 
 ---
 
 ### 🔍 Event Analysis
 
-Detailed inspection of the alerts shows how Wazuh tracks file integrity.
+Detailed inspection shows:
 
-For each modified file, the system records:
+* Hash changes between old and new file versions
+* Metadata differences (size, timestamps)
 
-* Previous vs updated hash values
-* Metadata changes (size, permissions, timestamps)
-
-This allows detection of unauthorized modifications and helps identify potential system compromise.
-
-```md
 ![Event Analysis](images/08_event_analysis_hash_changes.png)
-```
+
+---
+
+## 🧠 SOC Analysis & Response
+
+### SSH Attack Analysis
+
+* **Source IP:** 192.168.1.8
+* **Attack Type:** Brute-force
+* **Behavior:** Repeated failed logins
+
+**Impact:**
+Potential unauthorized access if credentials are compromised
+
+**Response:**
+
+* Block attacker IP
+* Disable root login
+* Use SSH keys
+* Implement rate limiting
+
+---
+
+### FIM Analysis
+
+* Modified `/etc/passwd`
+* Created and modified `/etc/fim_test_file`
+
+**Impact:**
+Possible privilege escalation or persistence
+
+**Response:**
+
+* Review file changes
+* Restore from backup
+* Audit logs
+* Restrict file permissions
 
 ---
 
 ## ⚠️ Challenges Faced
 
-* Agent connection issues due to changing IP addresses
-* Network configuration problems (NAT vs Bridged mode)
-* File Integrity Monitoring not triggering due to scan frequency
-* Permission issues while modifying protected system files
-
-These challenges helped improve troubleshooting and debugging skills in a real SOC environment.
+* Agent connection issues due to IP changes
+* Network configuration (NAT vs Bridged)
+* FIM not triggering due to scan frequency
+* Permission issues with protected files
 
 ---
 
 ## 📊 Conclusion
 
-This project demonstrates how a SIEM solution like Wazuh can be used to detect real-world attack scenarios in a controlled lab environment.
+This project demonstrates how Wazuh can detect real-world attack scenarios in a SOC environment.
 
-Through this lab, I was able to simulate attacks, monitor system activity, and analyze how security events are detected and logged.
+It highlights:
 
-The project highlights the importance of:
-
-* Continuous monitoring of system logs
-* Detecting brute-force attacks through authentication failures
-* Identifying unauthorized file changes using File Integrity Monitoring (FIM)
+* Detection of brute-force attacks
+* Monitoring of system integrity
+* Importance of log analysis
 
 ---
 
 ## 🧠 Skills Gained
 
-* SSH brute-force attack detection using Hydra
-* File Integrity Monitoring (FIM) on critical system files
-* Real-time alert analysis in Wazuh Dashboard
+* SIEM fundamentals and SOC workflow
 * Log analysis and threat detection
-* Basic incident analysis and investigation and hash-based detection
-* Hands-on SOC workflow: Attack → Detection → Analysis
-
----
-
-## 🚀 Future Improvements
-
-* Integrating additional log sources (e.g., web server logs)
-* Automating alert responses
-* Expanding detection rules for more attack scenarios
+* File Integrity Monitoring (FIM)
+* Incident investigation basics
+* Troubleshooting real-world issues
 
 ---
